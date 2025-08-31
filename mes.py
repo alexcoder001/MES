@@ -1,66 +1,21 @@
-class ProductionOrder:
-    def __init__(self, order_number, product_name, quantity):
-        self.order_number = order_number
-        self.product_name = product_name
-        self.quantity = quantity
-        self.status = 'created'
-        
-    def get_order_number(self):
-        return self.order_number
-
-    def start(self):
-        self.status = 'in production'
-        
-    def finish(self):
-        self.status = 'completed'
-        
-    # def produce(self, units):
-
-    # def get_production_efficiency(self):
-
-class ProductionLine: 
-    def __init__(self, name):
-        self.name = name
-        self.orders = []
-
-    def add_order(self, order = ProductionOrder):
-        if order in self.orders:
-            print('Order already exists, please choose another order.')
-        else:
-            self.orders.append(order)
-
-    def get_production_line_name(self):
-        return self.name
-        
-    def get_orders(self):
-        return self.orders
-
+from production_line import ProductionLine
+from production_order import ProductionOrder
+from mes_utils import mes_utils
 
 class MES: 
     def __init__(self):
-        return self
+        self.production_lines = []
 
     def add_production_line(self, name):
-        self.name = ProductionLine(name)
+        self.production_lines.append(name)
         
-#     def create_production_order(self, production_line_name, order_number): int
-
-#     def produce_units(self, production_line_name, order_name, units):
         
-#     def get_production_lines(self):
+    # def create_production_order(self, production_line_name, order_number) -> int:
 
-    def get_production_line(self, name):
-        return self.name
+    # def produce_units(self, production_line_name, order_name, units):
+        
+    def get_production_lines(self):
+        return self.production_lines
 
-
-# class mes_utils:
-
-#     @staticmethod
-#     def get_order_by_number(production_line, order_number):
-
-#     @staticmethod
-#     def calculate_production_efficiency(order):
-
-productionLine1 = MES.add_production_line('Line A')
-
-print(f'Production Line: {productionLine1.get_production_line_name()}. There are following orders there: {productionLine1.get_orders()}')
+    # def get_production_line(self, name):
+    #     return ProductionLine.get_production_line_name()
