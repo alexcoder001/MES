@@ -15,5 +15,7 @@ class ProductionOrder:
         self.status = 'completed'
         
     def produce(self, units):
-
-    # def get_production_efficiency(self):
+        pass
+    
+    def get_production_efficiency(self):
+        pass
