@@ -1,41 +1,48 @@
-from produktionsauftrag import Produktionsauftrag
-from produktionslinie import Produktionslinie
+from ProductionOrder import ProductionOrder
+from ProductionLine import ProductionLine
 from mes_utils import mes_utils
 
 
 class MES:
     def __init__(self):
-        self.produktionslinien = []
+        self.production_lines = {}
 
-    def add_produktionslinie(self, produktionslinie: Produktionslinie):
-        if produktionslinie in self.produktionslinien:
-            raise Exception(
-                f"{produktionslinie.name} existiert bereits, wähle anderen Name."
-            )
-        self.produktionslinien.append(produktionslinie)
+    def add_production_line(self, name: str):
+        if name in self.production_lines:
+            raise Exception(f"{name} existiert bereits, wähle anderen Name.")
+        self.production_lines[name] = ProductionLine(name)
 
-    def create_production_order(self, production_line_name, order_number) -> int:
-        Produktionsauftrag(production_line_name)
+    def get_production_line(self, name: str):
+        return self.production_lines.get(name, None)
 
-    def produce_units(self, production_line_name, order_name, units):
-        pass
+    def add_production_order(self, line_name: str, order: ProductionOrder):
+        line = self.get_production_line(line_name)
+        if not line:
+            raise Exception(f'Produktionslinie {line_name} existiert nicht.')
+        line.add_order(order)
+        return order
 
-    def get_produktionslinien(self):
-        return self.produktionslinien
+    def produce_units(self, production_line_name: str, order_number: int, units: int):
+        line = self.get_production_line(production_line_name)
+        if not line:
+            raise Exception(f"Produktionslinie {production_line_name} existiert nicht.")
+        order = mes_utils.get_order_by_number(line.get_orders(), order_number)
 
-    def get_produktionslinie(self, name):
-        for linie in self.produktionslinien:
-            if linie.get_produktionslinie() == name:
-                return linie
-        return None
+        order.start()
+        order.produce(units)
+        if order.produced_units >= order.quantity:
+            order.finish()
+        return order
+
+
+    def get_production_lines(self):
+        return list(self.production_lines.values())
 
 
 mes = MES()
-produktionslinie1 = Produktionslinie('A1')
-produktionslinie2 = Produktionslinie('A2')
-mes.add_produktionslinie(produktionslinie1)
-mes.add_produktionslinie(produktionslinie2)
-mes.get_produktionslinie('A1')
-print(f"{mes.get_produktionslinie('A2')}")
+mes.add_production_line("Linie A")
+order1 = ProductionOrder(1, 'Handy', 10)
+mes.add_production_order('Linie A', order1)
+mes.get_production_line('Linie A')
 
-mes_utils = mes_utils()
+print(f"{mes.produce_units('Linie A', 1, 20)}")
