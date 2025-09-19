@@ -1,34 +1,41 @@
-from production_line import ProductionLine
-from production_order import ProductionOrder
+from produktionsauftrag import Produktionsauftrag
+from produktionslinie import Produktionslinie
 from mes_utils import mes_utils
 
 
 class MES:
     def __init__(self):
-        self.production_lines = []
+        self.produktionslinien = []
 
-    def add_production_line(self, name):
-        production_line = ProductionLine(name=name)
-        self.production_lines.append(production_line)
+    def add_produktionslinie(self, produktionslinie: Produktionslinie):
+        if produktionslinie in self.produktionslinien:
+            raise Exception(
+                f"{produktionslinie.name} existiert bereits, wähle anderen Name."
+            )
+        self.produktionslinien.append(produktionslinie)
 
     def create_production_order(self, production_line_name, order_number) -> int:
-        ProductionOrder(production_line_name)
+        Produktionsauftrag(production_line_name)
 
     def produce_units(self, production_line_name, order_name, units):
         pass
 
-    def get_production_lines(self):
-        return self.production_lines
+    def get_produktionslinien(self):
+        return self.produktionslinien
 
-    def get_production_line(self, name):
-        for line in self.production_lines:
-            if line.get_production_line_name() == name:
-                return line
+    def get_produktionslinie(self, name):
+        for linie in self.produktionslinien:
+            if linie.get_produktionslinie() == name:
+                return linie
         return None
 
-mes = MES()
-mes.add_production_line("Line A")
 
-line = mes.get_production_line("Line A")
-print(f"Found line: {line.get_production_line_name() if line else 'Not found'}")
-print(f"All lines: {mes.get_production_lines()}")
+mes = MES()
+produktionslinie1 = Produktionslinie('A1')
+produktionslinie2 = Produktionslinie('A2')
+mes.add_produktionslinie(produktionslinie1)
+mes.add_produktionslinie(produktionslinie2)
+mes.get_produktionslinie('A1')
+print(f"{mes.get_produktionslinie('A2')}")
+
+mes_utils = mes_utils()
